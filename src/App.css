@@ -25,3 +25,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.firstPageContainer{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}

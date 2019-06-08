@@ -20,6 +20,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 //import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import CardMedia from '@material-ui/core/CardMedia';
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
@@ -61,14 +67,17 @@ const useStyles = makeStyles(theme => ({
   },
   textMenu: {
     color :'white'
-  }
+  },
+
 }));
+
+
 
 
 function Home(props) {
 
-  const { container } = props;
   const classes = useStyles();
+  const { container } = props;
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -143,7 +152,7 @@ function Home(props) {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route path="/" exact component={thisPage} />
+          <Route path="/" exact component={lawSuitCards} />
           <Route path="/Overview/" component={Overview} />
           <Route path="/Upload/" component={Upload} />
           <Route path="/Download/" component={Download} />
@@ -156,6 +165,42 @@ function Home(props) {
 function thisPage(){
   return <h2>thisPage</h2>;
 
+}
+
+const cardStyles = makeStyles(theme => ({
+  card: {
+    width: 275,
+    borderRadius : 20,
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+}));
+
+
+function lawSuitCards(){
+
+  const classes = cardStyles();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  return(
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          #0001
+        </Typography>
+        <CardMedia
+        className={classes.media}
+        image="folder.png"
+        title="Paella dish"
+        />
+        <Typography className={classes.pos} color="textSecondary" align="center" >
+          Lawsuit1
+        </Typography>
+      </CardContent>     
+    </Card>
+  );
 }
 
 export default Home;
