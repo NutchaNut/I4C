@@ -29,14 +29,14 @@ function FirstPage(){
         .then((snapshot) => {
           const profileData = snapshot.val();
             if(profileData.birthday == values.password){
-                this.props.history.push('/Home/')
+                this.state.history.push('/Home/')
             }
         });
 
       }
 
       const gotoRegister = () => {
-        this.props.history.push('/Register')
+        this.state.history.push('/Register')
       }
 
 
