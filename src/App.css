@@ -31,3 +31,8 @@ a {
   display: flex;
   flex-direction: column;
 }
+.toolbarContainer{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

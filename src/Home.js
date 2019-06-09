@@ -1,8 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Overview from './Overview';
 import Upload from './Upload';
 import Download from './Download';
+import './App.css';
+import HomeContent from './HomeContent'
 
 
 import AppBar from '@material-ui/core/AppBar';
@@ -10,21 +12,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-//import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-//import MailIcon from '@material-ui/icons/Mail';
-//import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import CardMedia from '@material-ui/core/CardMedia';
+
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
@@ -33,6 +26,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+    flexGrow: 1,
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -42,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     backgroundColor: '#0098A5',
-    marginLeft: drawerWidth,
+    //marginLeft: drawerWidth,
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
@@ -63,18 +57,21 @@ const useStyles = makeStyles(theme => ({
   },
   drawerContainer: {
     backgroundColor: '#66615B',
-    height:'800px',
+    height: '800px',
   },
   textMenu: {
-    color :'white'
+    color: 'white',
   },
-
 }));
 
-
-
-
 function Home(props) {
+
+  const [values, setValues] = React.useState({
+    userData: []  });
+
+  const [selectedLS, setSelectedLS] = React.useState('');
+
+  React.useEffect(() => setValues({userData : props.userData}) , [])
 
   const classes = useStyles();
   const { container } = props;
@@ -91,7 +88,7 @@ function Home(props) {
       <Divider />
       <List>
         {['Home'].map((text, index) => (
-          <Link to="/">          
+          <Link to="/Home">
             <ListItem button className={classes.textMenu} key={text}>
               <ListItemText primary={text} />
             </ListItem>
@@ -101,7 +98,7 @@ function Home(props) {
       <Divider />
       <List>
         {['Overview', 'Upload', 'Download'].map((text, index) => (
-          <Link to={`/${text}`}>          
+          <Link to={`/${text}`}>
             <ListItem button key={text}>
               <ListItemText className={classes.textMenu} primary={text} />
             </ListItem>
@@ -111,12 +108,22 @@ function Home(props) {
     </div>
   );
 
+
   return (
     <Router>
       <div className={classes.root}>
         <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
+          <Toolbar> 
+            <div className="toolbarContainer" >
+            <Typography >
+            {
+              values.userData.status == 'admin' ? 
+              values.userData.status
+                : values.userData.name + " " + values.userData.lastName
+            }
+            </Typography> 
+            </div>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
@@ -152,55 +159,44 @@ function Home(props) {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route path="/" exact component={lawSuitCards} />
-          <Route path="/Overview/" component={Overview} />
-          <Route path="/Upload/" component={Upload} />
-          <Route path="/Download/" component={Download} />
+          <Route
+            exact
+            path="/Home"
+            component={props => (
+              <HomeContent
+                {...props}
+                onLawSuitCardSelected={data => setSelectedLS(data)}
+                userData={values.userData}
+              />
+            )}
+          />          
+          {/* <Route path="/Overview/" component={Overview} /> */}
+          <Route
+            exact
+            path="/Upload/"
+            component={props => (
+              <Upload
+                {...props}
+                selectedLS={selectedLS}
+                userData={values.userData}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/Download/"
+            component={props => (
+              <Download
+                {...props}
+                selectedLS={selectedLS}
+              />
+            )}
+          />
         </main>
       </div>
     </Router>
   );
 }
 
-function thisPage(){
-  return <h2>thisPage</h2>;
-
-}
-
-const cardStyles = makeStyles(theme => ({
-  card: {
-    width: 275,
-    borderRadius : 20,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-}));
-
-
-function lawSuitCards(){
-
-  const classes = cardStyles();
-  const bull = <span className={classes.bullet}>•</span>;
-
-  return(
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          #0001
-        </Typography>
-        <CardMedia
-        className={classes.media}
-        image="folder.png"
-        title="Paella dish"
-        />
-        <Typography className={classes.pos} color="textSecondary" align="center" >
-          Lawsuit1
-        </Typography>
-      </CardContent>     
-    </Card>
-  );
-}
 
 export default Home;
