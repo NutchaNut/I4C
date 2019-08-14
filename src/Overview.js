@@ -1,4 +1,6 @@
 import React from 'react';
+import * as firebase from 'firebase';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,41 +18,52 @@ const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650,
   },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
 
-function createData(Name, Type, Date) {
-  return { Name, Type, Date };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0),
-  createData('Ice cream sandwich', 237, 9.0),
-  createData('Eclair', 262, 16.0),
-  createData('Cupcake', 305, 3.7),
-  createData('Gingerbread', 356, 16.0),
-];
 
-function Overview() {
+function Overview(props) {
   const classes = useStyles();
+
+  const [allFiles, setFiles] = React.useState([]);
+
+  const snapLawsuit = () => {
+    firebase
+      .database()
+      .ref('/lawsuit/'+props.selectedLS+'/files/')
+      .once('value')
+      .then(snapshot => {
+        const vals = snapshot.val();
+        const files = Object.keys(vals).map(fileID => ({
+          id: fileID,
+          ...vals[fileID]
+        }));
+        console.log(files);
+        setFiles(files)
+      });
+  }
+  React.useEffect(() => snapLawsuit(), [])
 
   return (
     <Paper className={classes.root}>
+      <p> lawsuitId : {props.selectedLS}</p>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
-            <TableCell align="right">Type</TableCell>
-            <TableCell align="right">Date</TableCell>
+            <TableCell align="right">User</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.Name}>
+          {allFiles.map(files => (
+            <TableRow key={files.id}>
               <TableCell component="th" scope="row">
-                {row.Name}
+                {files.filePath}
               </TableCell>
-              <TableCell align="right">{row.Type}</TableCell>
-              <TableCell align="right">{row.Date}</TableCell>
+              <TableCell align="right">{files.userId}</TableCell>
             </TableRow>
           ))}
         </TableBody>

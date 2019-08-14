@@ -37,10 +37,11 @@ class Upload extends Component {
   }
 
   componentDidMount = async () => {
+    console.log('start did mount');
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
+      console.log('done web 3');
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
 
@@ -56,6 +57,9 @@ class Upload extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance }, this.runExample);
+
+      console.log('Upload', this.state)
+
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -135,16 +139,22 @@ class Upload extends Component {
       alert('Error!! ,Please upload file first.');
     } else {
 
-      const data = [{filePath :this.state.ipfsHash, userId : this.props.userData.idCard }]
-      firebase
-      .database()
-      .ref('/lawsuit/' + this.props.selectedLS + '/files/')
-      .set(data);
+      //const data = [{filePath :this.state.ipfsHash, userId : this.props.userData.idCard }]
 
-
-      var url = 'https://gateway.ipfs.io/ipfs/';
+      console.log(this.props.userData)
+      const userId = this.props.userData.status === 'admin' 
+        ? 'admin'
+        : this.props.userData.idCard;
+      let message = firebase.database().ref('/lawsuit/' + this.props.selectedLS + '/files/')
+      let newMessage = message.push()
+      newMessage.set({
+        filePath :this.state.ipfsHash,
+        userId: userId
+      })
+      var url = "https://ipfs.io/ipfs/";
+      // var url = 'https://gateway.ipfs.io/ipfs/';
       var hash = this.state.ipfsHash;
-      window.location.href = url + hash;
+      window.open(url + hash);
     }
   };
   // ABOVE ADDED

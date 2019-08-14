@@ -56,7 +56,7 @@ function Download(props) {
 
   return (
     <Paper className={classes.root}>
-      <p>{props.selectedLS}</p>
+      <p> lawsuitId : {props.selectedLS}</p>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>

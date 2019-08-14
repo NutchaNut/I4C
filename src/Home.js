@@ -169,8 +169,17 @@ function Home(props) {
                 userData={values.userData}
               />
             )}
-          />          
-          {/* <Route path="/Overview/" component={Overview} /> */}
+          />      
+          <Route
+            exact
+            path="/Overview/"
+            component={props => (
+              <Overview
+                {...props}
+                selectedLS={selectedLS}
+              />
+            )}
+          />    
           <Route
             exact
             path="/Upload/"

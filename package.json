@@ -10,14 +10,15 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
-    "truffle-contract": "^4.0.19"
+    "truffle-contract": "^4.0.19",
+    "web3-js": "^1.0.5-beta.26"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier" : "prettier --single-quote --semi --trailing-comma es5 --write \"src/**/*.js\" "
+    "prettier": "prettier --single-quote --semi --trailing-comma es5 --write \"src/**/*.js\" "
   },
   "eslintConfig": {
     "extends": "react-app"

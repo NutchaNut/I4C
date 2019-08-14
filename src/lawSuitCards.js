@@ -29,7 +29,7 @@ function lawSuitCards(props) {
 
   const sendBack = () => {
     props.onLawSuitCardSelected(props.lawsuitId);
-    props.history.push('/Download/');
+    props.history.push('/Overview/');
   }
 
   return (
